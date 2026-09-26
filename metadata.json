@@ -1,0 +1,6 @@
+{
+  "name": "Travels Feeder",
+  "description": "Travels Feeder provides air tickets, Sri Lanka tours, worldwide holiday packages, accommodation, airport transfers, safari journeys, car rental and personalized travel services.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
