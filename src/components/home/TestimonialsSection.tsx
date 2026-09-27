@@ -67,7 +67,7 @@ export const TestimonialsSection: React.FC = () => {
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/70 backdrop-blur-xl ring-1 ring-black/[0.05] shadow-[0_1px_2px_rgba(0,0,0,0.04)] mb-5">
             <span className="flex -space-x-0.5">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
+                <Star key={i} className="w-3 h-3 gap-1 fill-amber-400 text-amber-400" />
               ))}
             </span>
             <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-slate-600">

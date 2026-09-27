@@ -107,13 +107,7 @@ export const ContactPreview: React.FC = () => {
           >
             {/* Section Header */}
             <div className="space-y-3">
-              {/* Pill Badge */}
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/80 backdrop-blur-xl border border-slate-200/80 shadow-sm">
-                <Sparkles className="w-3 h-3 text-[#E53935]" />
-                <span className="text-[11px] font-bold tracking-[0.12em] uppercase text-slate-600">
-                  Contact Us
-                </span>
-              </div>
+              
 
               <h2 className="text-[2rem] sm:text-4xl lg:text-[2.5rem] font-semibold text-[#0A0A0A] tracking-[-0.03em] leading-[1.05] text-balance">
                 Let's Craft Your

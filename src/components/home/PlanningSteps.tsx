@@ -69,15 +69,7 @@ export const PlanningSteps: React.FC = () => {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="text-center max-w-3xl mx-auto mb-16 sm:mb-20 space-y-4"
         >
-          {/* Pill Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 backdrop-blur-xl border border-slate-200/80 shadow-xs">
-            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-red-50 text-[#E53935]">
-              <Sparkles className="w-3 h-3" />
-            </span>
-            <span className="text-[11px] font-bold tracking-[0.14em] uppercase text-slate-700">
-              Seamless Travel Orchestration
-            </span>
-          </div>
+          
 
           <h2 className="text-[2.25rem] sm:text-5xl lg:text-6xl font-bold text-[#0A0A0A] tracking-[-0.035em] leading-[1.05] text-balance">
             Plan Your Journey <br className="hidden sm:inline" />
