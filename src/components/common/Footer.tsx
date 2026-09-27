@@ -1,151 +1,141 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin, ShieldCheck, Globe, Plane, Award } from 'lucide-react';
+import { Phone, Mail, MapPin } from 'lucide-react';
 import { COMPANY_DETAILS } from '../../data/travelData';
 
 export const Footer: React.FC = () => {
+  const quickLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'About Us', path: '/about' },
+    { name: 'Destinations', path: '/destinations' },
+    { name: 'Holiday Packages', path: '/packages' },
+    { name: 'Gallery', path: '/gallery' },
+    { name: 'Testimonials', path: '/testimonials' },
+  ];
+
+  const services = [
+    { name: 'Air Ticketing', path: '/flights' },
+    { name: 'Sri Lanka Tours', path: '/packages' },
+    { name: 'Wildlife Safaris', path: '/safari' },
+    { name: 'Airport Transfers', path: '/transfers' },
+    { name: 'Car Rental', path: '/car-rental' },
+    { name: 'Visa & Travel Support', path: '/visa' },
+  ];
+
   return (
-    <footer className="bg-[#0B0F19] text-white pt-16 sm:pt-20 pb-12 border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8">
-        {/* Top Brand & Accreditation Bar */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 pb-12 border-b border-white/10">
-          <div className="max-w-xl">
-            <Link to="/" className="flex items-center gap-2 group">
-              <div className="w-9 h-9 rounded-lg bg-[#E53935] flex items-center justify-center text-white font-black text-lg">
+    <footer className="bg-[#0B0F19] text-white">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+        {/* Main Content */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-14 py-12 sm:py-16">
+          {/* Brand Section */}
+          <div className="lg:col-span-5">
+            <Link to="/" className="inline-flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-md bg-[#E53935] flex items-center justify-center text-white text-sm font-bold">
                 TF
               </div>
-              <div className="flex flex-col leading-none">
-                <span className="font-extrabold text-2xl tracking-tight text-white">
-                  TRAVELS <span className="text-[#E53935]">FEEDER</span>
-                </span>
-                <span className="text-[10px] uppercase tracking-widest text-slate-400 font-medium">
-                  Air Tickets, Inbound & Worldwide Tours
-                </span>
-              </div>
+              <span className="text-lg sm:text-xl font-semibold tracking-tight">
+                Travels <span className="text-[#E53935]">Feeder</span>
+              </span>
             </Link>
-            <p className="text-slate-400 text-sm mt-3 leading-relaxed">
-              "{COMPANY_DETAILS.tagline}" — A premier Sri Lankan travel agency delivering seamless international air ticketing, island tour programmes, wildlife safaris, and personalized luxury travel experiences.
+
+            <p className="mt-4 text-sm text-slate-400 leading-relaxed max-w-md">
+              A trusted Sri Lankan travel agency offering international air
+              ticketing, tailor-made tours, wildlife safaris and worldwide
+              holiday experiences.
             </p>
-          </div>
 
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-3 rounded-2xl">
-              <Award className="w-6 h-6 text-[#2563EB]" />
-              <div>
-                <div className="text-xs font-bold text-white tracking-wide">{COMPANY_DETAILS.accreditation}</div>
-                <div className="text-[11px] text-slate-400">Global Airline Ticketing</div>
+            {/* Contact Info */}
+            <div className="mt-6 space-y-2.5">
+              <a
+                href={`tel:${COMPANY_DETAILS.phones[0]?.raw}`}
+                className="flex items-center gap-2.5 text-sm text-slate-300 hover:text-white transition-colors duration-300"
+              >
+                <Phone className="w-4 h-4 text-slate-500" />
+                {COMPANY_DETAILS.phones[0]?.display}
+              </a>
+
+              <a
+                href={`mailto:${COMPANY_DETAILS.emails[0]}`}
+                className="flex items-center gap-2.5 text-sm text-slate-300 hover:text-white transition-colors duration-300"
+              >
+                <Mail className="w-4 h-4 text-slate-500" />
+                {COMPANY_DETAILS.emails[0]}
+              </a>
+
+              <div className="flex items-start gap-2.5 text-sm text-slate-400">
+                <MapPin className="w-4 h-4 text-slate-500 mt-0.5 shrink-0" />
+                <span className="leading-relaxed">
+                  {COMPANY_DETAILS.address}
+                </span>
               </div>
             </div>
-
-            <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-3 rounded-2xl">
-              <ShieldCheck className="w-6 h-6 text-emerald-400" />
-              <div>
-                <div className="text-xs font-bold text-white tracking-wide">24/7 Operations</div>
-                <div className="text-[11px] text-slate-400">Bandaranaike Airport Team</div>
-              </div>
-            </div>
           </div>
-        </div>
 
-        {/* 4 Navigation Columns */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-12 border-b border-white/10">
-          {/* Explore */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
-              Explore
+          {/* Quick Links */}
+          <div className="lg:col-span-3">
+            <h4 className="text-sm font-medium text-white mb-4">
+              Quick Links
             </h4>
-            <ul className="space-y-2.5 text-sm text-slate-300">
-              <li><Link to="/" className="hover:text-white transition-colors">Home</Link></li>
-              <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/destinations" className="hover:text-white transition-colors">Destinations</Link></li>
-              <li><Link to="/packages" className="hover:text-white transition-colors">Holiday Packages</Link></li>
-              <li><Link to="/gallery" className="hover:text-white transition-colors">Photo Gallery</Link></li>
-              <li><Link to="/testimonials" className="hover:text-white transition-colors">Client Testimonials</Link></li>
+            <ul className="space-y-2.5">
+              {quickLinks.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    to={link.path}
+                    className="text-sm text-slate-400 hover:text-white transition-colors duration-300"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Services */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
-              Services
+          <div className="lg:col-span-4">
+            <h4 className="text-sm font-medium text-white mb-4">
+              Our Services
             </h4>
-            <ul className="space-y-2.5 text-sm text-slate-300">
-              <li><Link to="/flights" className="hover:text-white transition-colors">Air Ticketing</Link></li>
-              <li><Link to="/visa" className="hover:text-white transition-colors">Visa & Travel Support</Link></li>
-              <li><Link to="/accommodation" className="hover:text-white transition-colors">Accommodation</Link></li>
-              <li><Link to="/transfers" className="hover:text-white transition-colors">Airport Transfers</Link></li>
-              <li><Link to="/safari" className="hover:text-white transition-colors">Safari Journeys</Link></li>
-              <li><Link to="/car-rental" className="hover:text-white transition-colors">Car Rental</Link></li>
-            </ul>
-          </div>
-
-          {/* Travel Programs */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
-              Travel Programs
-            </h4>
-            <ul className="space-y-2.5 text-sm text-slate-300">
-              <li><Link to="/destinations" className="hover:text-white transition-colors">Sri Lanka Inbound</Link></li>
-              <li><Link to="/packages" className="hover:text-white transition-colors">Worldwide Holidays</Link></li>
-              <li><Link to="/safari" className="hover:text-white transition-colors">Wildlife Expeditions</Link></li>
-              <li><Link to="/packages" className="hover:text-white transition-colors">Hill Country Escapes</Link></li>
-              <li><Link to="/about" className="hover:text-white transition-colors">Guides & Naturalists</Link></li>
-              <li><Link to="/contact" className="hover:text-white transition-colors">Bespoke Travel Planning</Link></li>
-            </ul>
-          </div>
-
-          {/* Contact Details */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
-              Head Office
-            </h4>
-            <div className="space-y-3 text-sm text-slate-300">
-              <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-[#E53935] shrink-0 mt-0.5" />
-                <span className="text-xs leading-relaxed text-slate-400">
-                  {COMPANY_DETAILS.address}
-                </span>
-              </div>
-
-              <div className="flex flex-col gap-1 pt-1">
-                {COMPANY_DETAILS.phones.map((phone) => (
-                  <a
-                    key={phone.raw}
-                    href={`tel:${phone.raw}`}
-                    className="flex items-center gap-2 text-xs font-semibold text-white hover:text-[#E53935] transition-colors tabular-nums"
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5">
+              {services.map((service) => (
+                <li key={service.name}>
+                  <Link
+                    to={service.path}
+                    className="text-sm text-slate-400 hover:text-white transition-colors duration-300"
                   >
-                    <Phone className="w-3.5 h-3.5 text-[#2563EB]" />
-                    {phone.display}
-                  </a>
-                ))}
-              </div>
-
-              <div className="flex flex-col gap-1 pt-1">
-                {COMPANY_DETAILS.emails.map((email) => (
-                  <a
-                    key={email}
-                    href={`mailto:${email}`}
-                    className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors"
-                  >
-                    <Mail className="w-3.5 h-3.5 text-slate-500" />
-                    {email}
-                  </a>
-                ))}
-              </div>
-            </div>
+                    {service.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        {/* Legal & Copyright */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <div>
-            © 2026 {COMPANY_DETAILS.name}. All rights reserved.
-          </div>
+        {/* Bottom Bar */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 py-6 border-t border-white/5">
+          <p className="text-sm text-slate-500 text-center sm:text-left">
+            © {new Date().getFullYear()} {COMPANY_DETAILS.name}. All rights
+            reserved.
+          </p>
 
-          <div className="flex items-center gap-6">
-            <Link to="/about" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link to="/about" className="hover:text-white transition-colors">Terms of Booking</Link>
-            <Link to="/contact" className="hover:text-white transition-colors">Support & Inquiries</Link>
+          <div className="flex items-center gap-5 text-sm">
+            <Link
+              to="/privacy-policy"
+              className="text-slate-500 hover:text-white transition-colors duration-300"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              to="/terms-and-conditions"
+              className="text-slate-500 hover:text-white transition-colors duration-300"
+            >
+              Terms & Conditions
+            </Link>
+            <Link
+              to="/contact"
+              className="text-slate-500 hover:text-white transition-colors duration-300"
+            >
+              Contact
+            </Link>
           </div>
         </div>
       </div>
