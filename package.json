@@ -7,8 +7,6 @@
     "dev": "tsx watch server/index.ts",
     "start": "tsx server/index.ts",
     "db:migrate": "tsx server/db/migrate.ts",
-    "db:up": "docker compose up -d database",
-    "db:down": "docker compose down",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",

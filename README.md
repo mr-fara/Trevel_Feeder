@@ -33,10 +33,6 @@ The public API does not expose enquiry or transfer records. Administrative read
 and update endpoints require a separate authenticated admin workflow; the
 current frontend does not include one.
 
-Docker is optional. `npm run db:up` starts a separate Compose PostgreSQL on port
-`5433`; use it only if you prefer a container instead of the local service, and
-set `DATABASE_URL` accordingly.
-
 For production, run `npm run build` and start the API with
 `NODE_ENV=production npm start`. Set a strong production database password and
 provide its connection string through `DATABASE_URL`.
