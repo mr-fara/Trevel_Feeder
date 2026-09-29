@@ -43,6 +43,9 @@ The public API does not expose enquiry or transfer records. Admins sign in at
 against the seeded bcrypt hash in PostgreSQL and creates an HttpOnly session.
 Protected admin endpoints provide dashboard counts, searchable/paginated
 enquiry and transfer lists, and request status updates.
+The `/admin/content` workspace manages Flights, Packages, Destinations,
+Services, Safari, and Gallery content. Admin edits are validated and saved to
+PostgreSQL; the public site reads the updated catalog from `/api/content`.
 
 For production, run `npm run build` and start the API with
 `NODE_ENV=production npm start`. Set a strong production database password and

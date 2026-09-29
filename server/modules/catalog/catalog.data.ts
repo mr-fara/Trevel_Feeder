@@ -11,6 +11,8 @@ export const catalog = {
   galleryItems: data.GALLERY_ITEMS,
   testimonials: data.TESTIMONIALS,
   trustPoints: data.TRUST_POINTS,
+  flightRoutes: data.FLIGHT_ROUTES,
+  safariContent: data.SAFARI_CONTENT,
 };
 
 export type CatalogCollection = Exclude<keyof typeof catalog, 'companyDetails'>;

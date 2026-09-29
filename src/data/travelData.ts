@@ -669,6 +669,65 @@ export const TRUST_POINTS = [
   { title: "Worldwide Travel Assistance", desc: "Outbound holiday packages and flight support to 50+ countries." }
 ];
 
+export interface FlightRoute {
+  id: string;
+  from: string;
+  to: string;
+  duration: string;
+  note: string;
+}
+
+export const FLIGHT_ROUTES: FlightRoute[] = [
+  {id: 'cmb-lhr', from: 'Colombo (CMB)', to: 'London Heathrow (LHR)', duration: 'Direct & 1-Stop', note: 'Daily Connections'},
+  {id: 'cmb-dxb', from: 'Colombo (CMB)', to: 'Dubai (DXB)', duration: '4h 25m', note: 'Emirates & Flydubai'},
+  {id: 'cmb-sin', from: 'Colombo (CMB)', to: 'Singapore (SIN)', duration: '3h 50m', note: 'Singapore Airlines & SriLankan'},
+  {id: 'cmb-mle', from: 'Colombo (CMB)', to: 'Male, Maldives (MLE)', duration: '1h 15m', note: 'Frequent Daily Island Shuttles'},
+  {id: 'cmb-mel', from: 'Colombo (CMB)', to: 'Melbourne (MEL)', duration: '10h 15m', note: 'Direct & Via Hubs'},
+  {id: 'cmb-kul', from: 'Colombo (CMB)', to: 'Kuala Lumpur (KUL)', duration: '3h 40m', note: 'Malaysia Airlines & AirAsia'},
+  {id: 'cmb-doh', from: 'Colombo (CMB)', to: 'Doha (DOH)', duration: '4h 50m', note: 'Qatar Airways Hub'},
+  {id: 'cmb-syd', from: 'Colombo (CMB)', to: 'Sydney (SYD)', duration: '10h 45m', note: 'Direct Non-Stop Options'},
+];
+
+export interface SafariPark {
+  id: string;
+  name: string;
+  region: string;
+  highlight: string;
+  bestSeason: string;
+  description: string;
+  animals: string[];
+  focus: string;
+  animalSummary: string;
+  block: string;
+}
+
+export interface SafariContent {
+  heroBadge: string;
+  heroTitle: string;
+  heroDescription: string;
+  sectionHeading: string;
+  parks: SafariPark[];
+  keySpecies: string[];
+  stats: {value: string; label: string}[];
+  featuredSpecies: {name: string; scientificName: string; status: string; location: string; image: string};
+}
+
+export const SAFARI_CONTENT: SafariContent = {
+  heroBadge: 'Wildlife & Safari Journeys',
+  heroTitle: 'Into the Wild.',
+  heroDescription: "Experience the extraordinary wildlife of Sri Lanka through carefully arranged safari journeys. Private 4x4 open-top jeeps, dedicated naturalists, and access to the island's prime national parks.",
+  sectionHeading: 'Untamed Wild.',
+  parks: [
+    {id: 'yala', name: 'Yala National Park', region: 'Southern / Uva Province', highlight: 'Highest Leopard Density on Earth', bestSeason: 'February to July (Dry Season)', description: "Yala features semi-arid scrub forest bordered by the Indian Ocean. Its famous Block 1 holds the densest population of leopards worldwide, alongside wild elephants, sloth bears, and saltwater crocodiles.", animals: ['Sri Lankan Leopard', 'Asian Elephant', 'Sloth Bear', 'Spotted Deer', 'Mugger Crocodile', 'Black-necked Stork'], focus: "World's highest leopard density", animalSummary: 'Leopard · Elephant · Sloth Bear', block: 'Block 1'},
+    {id: 'wilpattu', name: 'Wilpattu National Park', region: 'North Western Province', highlight: "Sri Lanka's Largest & Oldest Natural Sanctuary", bestSeason: 'May to October', description: "Wilpattu is unique for its 'Villus'—natural sand-rimmed water basins that attract diverse wildlife. Its dense jungle canopy offers unhurried, secluded leopard and sloth bear tracking.", animals: ['Leopard', 'Barking Deer', 'Sloth Bear', 'Water Buffalo', 'Peafowl', 'Star Tortoise'], focus: 'Ancient lakes & dense forests', animalSummary: 'Leopard · Barking Deer · Crocodile', block: 'Northwest'},
+    {id: 'minneriya', name: 'Minneriya National Park', region: 'Central Cultural Province', highlight: 'The Elephant Gathering (Up to 300+ Elephants)', bestSeason: 'July to October', description: "During the dry season, hundreds of wild Asian elephants congregate on the lush green shores of the ancient Minneriya reservoir, creating one of the world's greatest wildlife spectacles.", animals: ['Asian Elephant Herds', 'Painted Storks', 'Cormorants', 'Sambar Deer', 'Purple-faced Langur'], focus: 'The Great Elephant Gathering', animalSummary: '300+ Wild Elephants · Pelicans', block: 'Central'},
+    {id: 'udawalawe', name: 'Udawalawe National Park', region: 'Sabaragamuwa / Uva Province', highlight: 'Guaranteed Year-Round Elephant Sightings', bestSeason: 'All Year Round', description: 'Reminiscent of East African savannah grasslands, Udawalawe provides unparalleled opportunities to observe matriarchal elephant herds with newborn calves at close range.', animals: ['Wild Elephants', 'Crested Serpent Eagle', 'Jackals', 'Wild Boar', 'Monitor Lizards'], focus: 'Year-round elephant sanctuary', animalSummary: 'Elephant Herds · Water Buffalo', block: 'Southern'},
+  ],
+  keySpecies: ['Sri Lankan Leopard', 'Asian Elephant', 'Sloth Bear', 'Mugger Crocodile', 'Indian Peafowl'],
+  stats: [{value: '26', label: 'National Parks'}, {value: '4x4', label: 'Private Jeeps'}, {value: '15+', label: 'Yrs Trackers'}],
+  featuredSpecies: {name: 'Sri Lankan Leopard', scientificName: 'Panthera pardus kotiya', status: 'Endangered', location: 'Yala · Block 1', image: yalaLeopardImg},
+};
+
 export interface TravelContent {
   companyDetails: typeof COMPANY_DETAILS;
   destinations: Destination[];
@@ -680,6 +739,8 @@ export interface TravelContent {
   galleryItems: GalleryItem[];
   testimonials: Testimonial[];
   trustPoints: typeof TRUST_POINTS;
+  flightRoutes: FlightRoute[];
+  safariContent: SafariContent;
 }
 
 export function hydrateTravelData(content: TravelContent): void {
@@ -693,4 +754,6 @@ export function hydrateTravelData(content: TravelContent): void {
   GALLERY_ITEMS.splice(0, GALLERY_ITEMS.length, ...content.galleryItems);
   TESTIMONIALS.splice(0, TESTIMONIALS.length, ...content.testimonials);
   TRUST_POINTS.splice(0, TRUST_POINTS.length, ...content.trustPoints);
+  FLIGHT_ROUTES.splice(0, FLIGHT_ROUTES.length, ...content.flightRoutes);
+  Object.assign(SAFARI_CONTENT, content.safariContent);
 }

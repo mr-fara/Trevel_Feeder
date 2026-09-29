@@ -14,6 +14,8 @@ export async function getContent() {
     galleryItems: documents.galleryItems ?? [],
     testimonials: documents.testimonials ?? [],
     trustPoints: documents.trustPoints ?? [],
+    flightRoutes: documents.flightRoutes ?? [],
+    safariContent: documents.safariContent ?? {},
   };
 }
 

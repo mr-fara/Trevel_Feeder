@@ -7,6 +7,7 @@ import {adminSessionCookie, createAdminSession, isAdminSessionConfigured, verify
 import * as adminService from './admin.service.ts';
 import {enquiryStatusSchema, listQuerySchema, loginSchema, transferStatusSchema} from './admin.schema.ts';
 import type {EnquiryStatus, TransferStatus} from './admin.repository.ts';
+import {managedContentSchemas, type ManagedContentCollection} from './admin.content.schema.ts';
 
 const sessionCookieOptions = {
   httpOnly: true,
@@ -86,4 +87,20 @@ export const patchTransferStatus: RequestHandler = asyncHandler(async (request, 
   const transfer = await adminService.updateTransferStatus(request.params.id, status as TransferStatus);
   if (!transfer) throw new HttpError(404, 'Transfer request not found', 'TRANSFER_NOT_FOUND');
   response.json({data: transfer});
+});
+
+export const putContent: RequestHandler = asyncHandler(async (request, response) => {
+  const collection = request.params.collection;
+  if (!Object.hasOwn(managedContentSchemas, collection)) {
+    throw new HttpError(404, 'Managed content collection not found', 'CONTENT_COLLECTION_NOT_FOUND');
+  }
+
+  const key = collection as ManagedContentCollection;
+  const validation = managedContentSchemas[key].safeParse(request.body);
+  if (!validation.success) {
+    throw new HttpError(400, 'Content validation failed', 'VALIDATION_ERROR', validation.error.issues.map(({path, message}) => ({path, message})));
+  }
+
+  await adminService.saveContent(key, validation.data);
+  response.json({data: {collection: key, updated: true}});
 });

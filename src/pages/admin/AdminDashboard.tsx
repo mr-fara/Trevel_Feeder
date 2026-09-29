@@ -14,6 +14,11 @@ import {
   Mail,
   MapPin,
   MessageSquareText,
+  Binoculars,
+  BriefcaseBusiness,
+  Images,
+  Package,
+  Plane,
   RefreshCw,
   Search,
   ShieldCheck,
@@ -22,6 +27,7 @@ import {
 } from 'lucide-react';
 import {ApiError, apiGet, apiPatch, apiPost} from '../../lib/api';
 import {AdminLoginPage} from './AdminLoginPage';
+import {AdminContent} from './AdminContent';
 
 interface AdminSession {email: string}
 interface Paginated<T> {items: T[]; page: number; pageSize: number; total: number}
@@ -139,6 +145,13 @@ function AdminLayout() {
           <SidebarLink to="/admin" icon={<LayoutDashboard size={17} />} label="Overview" end />
           <SidebarLink to="/admin/enquiries" icon={<MessageSquareText size={17} />} label="Enquiries" />
           <SidebarLink to="/admin/transfers" icon={<CarFront size={17} />} label="Transfers" />
+          <p className="hidden px-3 pb-2 pt-5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/35 lg:block">Website pages</p>
+          <SidebarLink to="/admin/content/flights" icon={<Plane size={17} />} label="Flights" />
+          <SidebarLink to="/admin/content/packages" icon={<Package size={17} />} label="Packages" />
+          <SidebarLink to="/admin/content/destinations" icon={<MapPin size={17} />} label="Destinations" />
+          <SidebarLink to="/admin/content/services" icon={<BriefcaseBusiness size={17} />} label="Services" />
+          <SidebarLink to="/admin/content/safari" icon={<Binoculars size={17} />} label="Safari" />
+          <SidebarLink to="/admin/content/gallery" icon={<Images size={17} />} label="Gallery" />
         </nav>
         <div className="hidden border-t border-white/10 p-4 lg:block">
           <div className="mb-3 flex min-w-0 items-center gap-2.5 px-2">
@@ -343,6 +356,13 @@ function AdminRoutes() {
       <Route index element={<AdminOverview />} />
       <Route path="enquiries" element={<RequestInbox kind="enquiries" />} />
       <Route path="transfers" element={<RequestInbox kind="transfers" />} />
+      <Route path="content" element={<Navigate to="/admin/content/flights" replace />} />
+      <Route path="content/flights" element={<AdminContent collection="flightRoutes" />} />
+      <Route path="content/packages" element={<AdminContent collection="tourPackages" />} />
+      <Route path="content/destinations" element={<AdminContent collection="destinations" />} />
+      <Route path="content/services" element={<AdminContent collection="services" />} />
+      <Route path="content/safari" element={<AdminContent collection="safariContent" />} />
+      <Route path="content/gallery" element={<AdminContent collection="galleryItems" />} />
     </Route>
     <Route path="*" element={<Navigate to="/admin" replace />} />
   </Routes>;

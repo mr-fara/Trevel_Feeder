@@ -36,6 +36,16 @@ export async function recordAdminLogin(id: string): Promise<void> {
   await pool.query('UPDATE admin_users SET last_login_at = NOW() WHERE id = $1', [id]);
 }
 
+export async function saveContentDocument(collection: string, payload: unknown) {
+  await pool.query(
+    `INSERT INTO content_documents (document_key, payload)
+     VALUES ($1, $2::jsonb)
+     ON CONFLICT (document_key) DO UPDATE
+       SET payload = EXCLUDED.payload, updated_at = NOW()`,
+    [collection, JSON.stringify(payload)],
+  );
+}
+
 function buildFilters(query: RequestListQuery) {
   const values: unknown[] = [query.status || null];
   let where = 'WHERE ($1::text IS NULL OR status = $1)';

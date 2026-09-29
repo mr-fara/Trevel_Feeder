@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Plane, ArrowRight, ShieldCheck, Clock, Check, FileText, Globe, ArrowRightLeft, Sparkles } from 'lucide-react';
 import heroFlightImg from '../assets/images/hero_flight_travel_1790443248215.jpg';
 import { useEnquiry } from '../context/EnquiryContext';
-import { COMPANY_DETAILS } from '../data/travelData';
+import {COMPANY_DETAILS, FLIGHT_ROUTES} from '../data/travelData';
 
 export const FlightsPage: React.FC = () => {
   const { openEnquiry } = useEnquiry();
@@ -14,17 +14,6 @@ export const FlightsPage: React.FC = () => {
   const [returnDate, setReturnDate] = useState('2026-11-05');
   const [cabin, setCabin] = useState('Economy');
   const [passengers, setPassengers] = useState('2 Passengers');
-
-  const popularRoutes = [
-    { from: "Colombo (CMB)", to: "London Heathrow (LHR)", duration: "Direct & 1-Stop", note: "Daily Connections" },
-    { from: "Colombo (CMB)", to: "Dubai (DXB)", duration: "4h 25m", note: "Emirates & Flydubai" },
-    { from: "Colombo (CMB)", to: "Singapore (SIN)", duration: "3h 50m", note: "Singapore Airlines & SriLankan" },
-    { from: "Colombo (CMB)", to: "Male, Maldives (MLE)", duration: "1h 15m", note: "Frequent Daily Island Shuttles" },
-    { from: "Colombo (CMB)", to: "Melbourne (MEL)", duration: "10h 15m", note: "Direct & Via Hubs" },
-    { from: "Colombo (CMB)", to: "Kuala Lumpur (KUL)", duration: "3h 40m", note: "Malaysia Airlines & AirAsia" },
-    { from: "Colombo (CMB)", to: "Doha (DOH)", duration: "4h 50m", note: "Qatar Airways Hub" },
-    { from: "Colombo (CMB)", to: "Sydney (SYD)", duration: "10h 45m", note: "Direct Non-Stop Options" }
-  ];
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -205,9 +194,9 @@ export const FlightsPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {popularRoutes.map((route, i) => (
+          {FLIGHT_ROUTES.map((route) => (
             <div
-              key={i}
+              key={route.id}
               className="bg-white rounded-2xl p-5 border border-slate-100 shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between"
             >
               <div>

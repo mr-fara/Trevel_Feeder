@@ -1,45 +1,10 @@
 import React from 'react';
 import { Camera, Check, ShieldCheck, Clock, MapPin, Compass } from 'lucide-react';
-import yalaLeopardImg from '../assets/images/yala_leopard_safari_1790443274802.jpg';
 import { useEnquiry } from '../context/EnquiryContext';
+import {SAFARI_CONTENT} from '../data/travelData';
 
 export const SafariPage: React.FC = () => {
   const { openEnquiry } = useEnquiry();
-
-  const nationalParks = [
-    {
-      name: "Yala National Park",
-      region: "Southern / Uva Province",
-      highlight: "Highest Leopard Density on Earth",
-      bestSeason: "February to July (Dry Season)",
-      description: "Yala features semi-arid scrub forest bordered by the Indian Ocean. Its famous Block 1 holds the densest population of leopards worldwide, alongside wild elephants, sloth bears, and saltwater crocodiles.",
-      animals: ["Sri Lankan Leopard", "Asian Elephant", "Sloth Bear", "Spotted Deer", "Mugger Crocodile", "Black-necked Stork"]
-    },
-    {
-      name: "Wilpattu National Park",
-      region: "North Western Province",
-      highlight: "Sri Lanka's Largest & Oldest Natural Sanctuary",
-      bestSeason: "May to October",
-      description: "Wilpattu is unique for its 'Villus'—natural sand-rimmed water basins that attract diverse wildlife. Its dense jungle canopy offers unhurried, secluded leopard and sloth bear tracking.",
-      animals: ["Leopard", "Barking Deer", "Sloth Bear", "Water Buffalo", "Peafowl", "Star Tortoise"]
-    },
-    {
-      name: "Minneriya National Park",
-      region: "Central Cultural Province",
-      highlight: "The Elephant Gathering (Up to 300+ Elephants)",
-      bestSeason: "July to October",
-      description: "During the dry season, hundreds of wild Asian elephants congregate on the lush green shores of the ancient Minneriya reservoir, creating one of the world's greatest wildlife spectacles.",
-      animals: ["Asian Elephant Herds", "Painted Storks", "Cormorants", "Sambar Deer", "Purple-faced Langur"]
-    },
-    {
-      name: "Udawalawe National Park",
-      region: "Sabaragamuwa / Uva Province",
-      highlight: "Guaranteed Year-Round Elephant Sightings",
-      bestSeason: "All Year Round",
-      description: "Reminiscent of East African savannah grasslands, Udawalawe provides unparalleled opportunities to observe matriarchal elephant herds with newborn calves at close range.",
-      animals: ["Wild Elephants", "Crested Serpent Eagle", "Jackals", "Wild Boar", "Monitor Lizards"]
-    }
-  ];
 
   return (
     <main className="mt-10 py-20 sm:py-28 bg-[#F7F9FC]">
@@ -48,20 +13,20 @@ export const SafariPage: React.FC = () => {
         <div className="bg-[#0B0F19] text-white rounded-3xl sm:rounded-[40px] p-8 sm:p-14 mb-16 relative overflow-hidden">
           <div className="max-w-2xl relative z-10 space-y-4">
             <span className="text-xs font-bold tracking-wider uppercase text-amber-400">
-              Wildlife & Safari Journeys
+              {SAFARI_CONTENT.heroBadge}
             </span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-              Into the Wild.
+              {SAFARI_CONTENT.heroTitle}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              Experience the extraordinary wildlife of Sri Lanka through carefully arranged safari journeys. Private 4x4 open-top jeeps, dedicated naturalists, and access to the island's prime national parks.
+              {SAFARI_CONTENT.heroDescription}
             </p>
             <div className="pt-2 flex items-center gap-4">
               <button
                 onClick={() =>
                   openEnquiry({
                     service: 'Safari Journey',
-                    destination: 'Yala / Wilpattu / Minneriya Safari'
+                    destination: `${SAFARI_CONTENT.parks.map((park) => park.name).join(' / ')} Safari`
                   })
                 }
                 className="px-7 py-3.5 bg-[#E53935] hover:bg-[#B91C1C] text-white rounded-full text-xs font-bold tracking-wide shadow-sm cursor-pointer"
@@ -73,7 +38,7 @@ export const SafariPage: React.FC = () => {
 
           <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-30 lg:opacity-60 hidden md:block">
             <img
-              src={yalaLeopardImg}
+              src={SAFARI_CONTENT.featuredSpecies.image}
               alt="Yala Leopard"
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover"
@@ -84,7 +49,7 @@ export const SafariPage: React.FC = () => {
 
         {/* National Parks Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {nationalParks.map((park) => (
+          {SAFARI_CONTENT.parks.map((park) => (
             <div
               key={park.name}
               className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between"

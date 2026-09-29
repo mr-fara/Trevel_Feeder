@@ -26,3 +26,4 @@ adminRouter.get('/enquiries', controller.getEnquiries);
 adminRouter.patch('/enquiries/:id/status', validateBody(enquiryStatusSchema), controller.patchEnquiryStatus);
 adminRouter.get('/transfers', controller.getTransfers);
 adminRouter.patch('/transfers/:id/status', validateBody(transferStatusSchema), controller.patchTransferStatus);
+adminRouter.put('/content/:collection', controller.putContent);

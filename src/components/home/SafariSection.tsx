@@ -1,52 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Camera, MapPin, Award, Binoculars } from 'lucide-react';
-import yalaLeopardImg from '../../assets/images/yala_leopard_safari_1790443274802.jpg';
 import { useEnquiry } from '../../context/EnquiryContext';
+import {SAFARI_CONTENT} from '../../data/travelData';
 
 export const SafariSection: React.FC = () => {
   const { openEnquiry } = useEnquiry();
-
-  const parks = [
-    {
-      name: 'Yala National Park',
-      focus: "World's highest leopard density",
-      animals: 'Leopard · Elephant · Sloth Bear',
-      block: 'Block 1',
-    },
-    {
-      name: 'Wilpattu National Park',
-      focus: 'Ancient lakes & dense forests',
-      animals: 'Leopard · Barking Deer · Crocodile',
-      block: 'Northwest',
-    },
-    {
-      name: 'Minneriya National Park',
-      focus: 'The Great Elephant Gathering',
-      animals: '300+ Wild Elephants · Pelicans',
-      block: 'Central',
-    },
-    {
-      name: 'Udawalawe National Park',
-      focus: 'Year-round elephant sanctuary',
-      animals: 'Elephant Herds · Water Buffalo',
-      block: 'Southern',
-    },
-  ];
-
-  const keySpecies = [
-    'Sri Lankan Leopard',
-    'Asian Elephant',
-    'Sloth Bear',
-    'Mugger Crocodile',
-    'Indian Peafowl',
-  ];
-
-  const stats = [
-    { value: '26', label: 'National Parks' },
-    { value: '4x4', label: 'Private Jeeps' },
-    { value: '15+', label: 'Yrs Trackers' },
-  ];
 
   return (
     <section className="relative py-20 sm:py-28 lg:py-32 bg-[#0A0E17] text-white overflow-hidden">
@@ -70,9 +29,7 @@ export const SafariSection: React.FC = () => {
           
           <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.05]">
             Into the
-            <span className="block italic font-serif text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-600">
-              Untamed Wild.
-            </span>
+            <span className="block italic font-serif text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-600">{SAFARI_CONTENT.sectionHeading}</span>
           </h2>
         </div>
 
@@ -88,8 +45,8 @@ export const SafariSection: React.FC = () => {
               {/* Main image */}
               <div className="relative rounded-[28px] sm:rounded-[36px] overflow-hidden border border-white/10 shadow-[0_25px_80px_-15px_rgba(0,0,0,0.8)] aspect-[4/5] sm:aspect-[4/4.2] lg:aspect-[4/4.6] bg-black group">
                 <img
-                  src={yalaLeopardImg}
-                  alt="Wild Sri Lankan leopard on safari in Yala"
+                  src={SAFARI_CONTENT.featuredSpecies.image}
+                  alt={`${SAFARI_CONTENT.featuredSpecies.name} on safari`}
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
                 />
@@ -103,7 +60,7 @@ export const SafariSection: React.FC = () => {
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-xl border border-white/10">
                     <MapPin className="w-3 h-3 text-amber-400" />
                     <span className="text-[10px] font-bold tracking-wider uppercase text-white">
-                      Yala · Block 1
+                      {SAFARI_CONTENT.featuredSpecies.location}
                     </span>
                   </div>
                   <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#E53935]/90 backdrop-blur-md">
@@ -122,10 +79,10 @@ export const SafariSection: React.FC = () => {
                   <div className="flex items-end justify-between gap-4">
                     <div>
                       <div className="text-xl sm:text-2xl font-bold leading-tight">
-                        Sri Lankan Leopard
+                        {SAFARI_CONTENT.featuredSpecies.name}
                       </div>
                       <div className="text-xs sm:text-sm italic text-white/60 font-serif mt-0.5">
-                        Panthera pardus kotiya
+                        {SAFARI_CONTENT.featuredSpecies.scientificName}
                       </div>
                     </div>
                     <div className="hidden sm:flex flex-col items-end">
@@ -133,7 +90,7 @@ export const SafariSection: React.FC = () => {
                         Endemic
                       </div>
                       <div className="text-sm font-bold text-amber-400">
-                        Endangered
+                        {SAFARI_CONTENT.featuredSpecies.status}
                       </div>
                     </div>
                   </div>
@@ -169,7 +126,7 @@ export const SafariSection: React.FC = () => {
                   Est. Since 2010
                 </div>
                 <div className="flex items-center gap-4">
-                  {stats.map((s) => (
+                  {SAFARI_CONTENT.stats.map((s) => (
                     <div key={s.label} className="text-center">
                       <div className="text-lg font-extrabold text-white leading-none">
                         {s.value}
@@ -192,17 +149,13 @@ export const SafariSection: React.FC = () => {
               <h2 className="text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.02]">
                 Into the
                 <span className="block italic font-serif text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-600">
-                  Untamed Wild.
+                  {SAFARI_CONTENT.sectionHeading}
                 </span>
               </h2>
             </div>
 
             <p className="text-slate-300/90 text-sm sm:text-base lg:text-[15px] leading-relaxed max-w-xl">
-              Experience the extraordinary wildlife of Sri Lanka through
-              meticulously curated safari journeys. Private open-top 4x4 jeeps,
-              priority park clearances, and certified naturalists with decades
-              of tracking expertise — every detail refined for the discerning
-              traveler.
+              {SAFARI_CONTENT.heroDescription}
             </p>
 
             {/* Key species */}
@@ -214,7 +167,7 @@ export const SafariSection: React.FC = () => {
                 </span>
               </div>
               <div className="flex flex-wrap gap-2">
-                {keySpecies.map((animal) => (
+                {SAFARI_CONTENT.keySpecies.map((animal) => (
                   <span
                     key={animal}
                     className="px-3.5 py-1.5 rounded-full bg-gradient-to-br from-white/[0.08] to-white/[0.04] border border-white/10 text-[11px] sm:text-xs text-white/90 hover:border-amber-400/40 hover:text-amber-100 transition-all cursor-default"
@@ -234,7 +187,7 @@ export const SafariSection: React.FC = () => {
                 </span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {parks.map((park) => (
+                {SAFARI_CONTENT.parks.map((park) => (
                   <div
                     key={park.name}
                     className="group relative bg-gradient-to-br from-white/[0.06] to-white/[0.02] border border-white/10 p-4 rounded-2xl hover:border-amber-400/30 hover:from-white/[0.09] transition-all duration-300 overflow-hidden"
@@ -255,7 +208,7 @@ export const SafariSection: React.FC = () => {
                         {park.focus}
                       </div>
                       <div className="mt-2 pt-2 border-t border-white/[0.06] text-[10px] text-amber-400/90 font-medium">
-                        {park.animals}
+                        {park.animalSummary}
                       </div>
                     </div>
                   </div>
@@ -265,7 +218,7 @@ export const SafariSection: React.FC = () => {
 
             {/* Mobile stats bar */}
             <div className="lg:hidden grid grid-cols-3 gap-3 py-4 border-y border-white/10">
-              {stats.map((s) => (
+              {SAFARI_CONTENT.stats.map((s) => (
                 <div key={s.label} className="text-center">
                   <div className="text-2xl font-extrabold text-white leading-none">
                     {s.value}
