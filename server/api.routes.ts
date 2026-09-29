@@ -5,6 +5,7 @@ import {pool} from './db/pool.ts';
 import {catalogRouter} from './modules/catalog/catalog.routes.ts';
 import {enquiryRouter} from './modules/enquiries/enquiry.routes.ts';
 import {transferRouter} from './modules/transfers/transfer.routes.ts';
+import {adminRouter} from './modules/admin/admin.routes.ts';
 
 export const apiRouter = Router();
 
@@ -24,3 +25,4 @@ const submissionLimit = rateLimit({
 });
 apiRouter.use('/enquiries', submissionLimit, enquiryRouter);
 apiRouter.use('/transfers', submissionLimit, transferRouter);
+apiRouter.use('/admin', adminRouter);

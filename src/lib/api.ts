@@ -30,7 +30,14 @@ interface ApiEnvelope<T> {
 }
 
 interface ApiErrorEnvelope {
-  error?: {message?: string};
+  error?: {code?: string; message?: string};
+}
+
+export class ApiError extends Error {
+  constructor(message: string, public readonly status: number, public readonly code?: string) {
+    super(message);
+    this.name = 'ApiError';
+  }
 }
 
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
@@ -38,11 +45,12 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
     ...init,
     headers: {'Content-Type': 'application/json', ...init?.headers},
   });
+  if (response.status === 204) return undefined as T;
   const payload = await response.json() as ApiEnvelope<T> | ApiErrorEnvelope;
 
   if (!response.ok) {
-    const message = 'error' in payload ? payload.error?.message : undefined;
-    throw new Error(message || `Request failed (${response.status})`);
+    const error = 'error' in payload ? payload.error : undefined;
+    throw new ApiError(error?.message || `Request failed (${response.status})`, response.status, error?.code);
   }
 
   return (payload as ApiEnvelope<T>).data;
@@ -54,4 +62,8 @@ export function apiGet<T>(url: string): Promise<T> {
 
 export function apiPost<T>(url: string, body: unknown): Promise<T> {
   return request<T>(url, {method: 'POST', body: JSON.stringify(body)});
+}
+
+export function apiPatch<T>(url: string, body: unknown): Promise<T> {
+  return request<T>(url, {method: 'PATCH', body: JSON.stringify(body)});
 }

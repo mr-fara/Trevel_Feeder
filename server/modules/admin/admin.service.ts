@@ -1,0 +1,9 @@
+import * as adminRepository from './admin.repository.ts';
+import type {RequestListQuery} from './admin.schema.ts';
+import type {EnquiryStatus, TransferStatus} from './admin.repository.ts';
+
+export const getDashboardStats = () => adminRepository.getDashboardStats();
+export const listEnquiries = (query: RequestListQuery) => adminRepository.listEnquiries(query);
+export const listTransfers = (query: RequestListQuery) => adminRepository.listTransfers(query);
+export const updateEnquiryStatus = (id: string, status: EnquiryStatus) => adminRepository.updateEnquiryStatus(id, status);
+export const updateTransferStatus = (id: string, status: TransferStatus) => adminRepository.updateTransferStatus(id, status);

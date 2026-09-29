@@ -19,6 +19,15 @@ View your app in AI Studio: https://ai.studio/apps/04641220-032d-48a1-bab3-8667f
 4. Create the schema and seed the current travel catalog with `npm run db:migrate`.
 5. Start the frontend and API together with `npm run dev` and open `http://localhost:3000`.
 
+To enable `/admin`, generate a bcrypt password hash in the terminal with
+`npm run admin:hash-password` and put it in `ADMIN_PASSWORD_HASH` in your
+local `.env`. Set `ADMIN_EMAIL` and generate a session signing key with
+`node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"`,
+then save that value as `ADMIN_SESSION_SECRET` in `.env`. Run
+`npm run db:migrate` followed by `npm run admin:seed` to store the admin email
+and bcrypt hash in PostgreSQL. Login verifies the submitted password against
+that database hash; plaintext passwords are never stored. Keep `.env` private.
+
 In PowerShell, if port 3000 is already occupied, run `$env:PORT=3001; npm run dev`.
 
 The API returns JSON in a `{ data }` envelope. `GET /api/content` provides the
@@ -29,9 +38,11 @@ contact enquiries. `POST /api/transfers` stores airport transfer requests.
 `GET /api/health` checks both the API and its PostgreSQL connection. Requests
 are validated, rate-limited, assigned a request ID, and logged centrally.
 
-The public API does not expose enquiry or transfer records. Administrative read
-and update endpoints require a separate authenticated admin workflow; the
-current frontend does not include one.
+The public API does not expose enquiry or transfer records. Admins sign in at
+`/admin/login`; `POST /api/admin/auth/login` checks the submitted password
+against the seeded bcrypt hash in PostgreSQL and creates an HttpOnly session.
+Protected admin endpoints provide dashboard counts, searchable/paginated
+enquiry and transfer lists, and request status updates.
 
 For production, run `npm run build` and start the API with
 `NODE_ENV=production npm start`. Set a strong production database password and
