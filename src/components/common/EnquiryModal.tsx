@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useEnquiry } from '../../context/EnquiryContext';
 import { COMPANY_DETAILS } from '../../data/travelData';
+import {apiPost} from '../../lib/api';
 
 export const EnquiryModal: React.FC = () => {
   const { isOpen, enquiryData, closeEnquiry } = useEnquiry();
@@ -32,6 +33,7 @@ export const EnquiryModal: React.FC = () => {
   const [message, setMessage] = useState(enquiryData.notes || '');
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   useEffect(() => {
     if (isOpen) {
@@ -41,6 +43,7 @@ export const EnquiryModal: React.FC = () => {
       setTravellers(enquiryData.passengers || '2 Travellers');
       setMessage(enquiryData.notes || '');
       setSubmitted(false);
+      setSubmitError('');
     }
   }, [isOpen, enquiryData]);
 
@@ -55,14 +58,30 @@ export const EnquiryModal: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, closeEnquiry]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setSubmitError('');
+    try {
+      await apiPost('/api/enquiries', {
+        fullName,
+        email,
+        phone,
+        service,
+        destination,
+        travelDate,
+        returnDate: enquiryData.returnDate,
+        passengers: travellers,
+        tripType: enquiryData.tripType,
+        message,
+        source: 'enquiry-modal',
+      });
       setSubmitted(true);
-    }, 600);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Could not submit your enquiry. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const serviceOptions = [
@@ -365,6 +384,7 @@ export const EnquiryModal: React.FC = () => {
                 </div>
 
                 {/* Footer & Action Button */}
+                {submitError && <p role="alert" className="text-sm text-red-700">{submitError}</p>}
                 <div className="pt-2 sm:pt-3 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100">
                   <div className="flex items-center gap-3 text-xs text-slate-500 order-2 sm:order-1">
                     <div className="flex items-center gap-1.5">

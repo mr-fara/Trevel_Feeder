@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Plane, CheckCircle2, ShieldCheck, Clock, MapPin, Users, Car, Send } from 'lucide-react';
 import { COMPANY_DETAILS } from '../data/travelData';
+import {apiPost} from '../lib/api';
 
 export const TransfersPage: React.FC = () => {
   const [arrivalAirport, setArrivalAirport] = useState('Colombo Bandaranaike Intl (CMB)');
@@ -14,10 +15,32 @@ export const TransfersPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError('');
+    try {
+      await apiPost('/api/transfers', {
+        airport: arrivalAirport,
+        destination,
+        arrivalDate,
+        arrivalTime,
+        flightNumber,
+        passengers: Number(passengers),
+        vehicleType,
+        fullName: name,
+        email,
+        phone,
+      });
+      setSubmitted(true);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Could not submit your transfer request. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const transferOptions = [
@@ -209,11 +232,13 @@ export const TransfersPage: React.FC = () => {
               </div>
 
               <div className="pt-3">
+                {submitError && <p role="alert" className="mb-3 text-sm text-red-700">{submitError}</p>}
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   className="w-full py-3.5 bg-[#2563EB] hover:bg-[#0F3B82] text-white rounded-full font-bold text-xs tracking-wider uppercase transition-colors cursor-pointer"
                 >
-                  Request Transfer
+                  {isSubmitting ? 'Sending...' : 'Request Transfer'}
                 </button>
               </div>
             </form>

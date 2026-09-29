@@ -4,11 +4,11 @@
  * Tagline: "Feel the difference with us"
  */
 
-import heroFlightImg from '../assets/images/hero_flight_travel_1790443248215.jpg';
-import sigiriyaImg from '../assets/images/sigiriya_rock_sunrise_1790443260997.jpg';
-import yalaLeopardImg from '../assets/images/yala_leopard_safari_1790443274802.jpg';
-import luxuryResortImg from '../assets/images/luxury_resort_ocean_1790443287801.jpg';
-import ellaHillsImg from '../assets/images/ella_tea_hills_1790443301054.jpg';
+const heroFlightImg = '/image/hero_flight_travel_1790443248215.jpg';
+const sigiriyaImg = '/image/sigiriya_rock_sunrise_1790443260997.jpg';
+const yalaLeopardImg = '/image/yala_leopard_safari_1790443274802.jpg';
+const luxuryResortImg = '/image/luxury_resort_ocean_1790443287801.jpg';
+const ellaHillsImg = '/image/ella_tea_hills_1790443301054.jpg';
 
 export const COMPANY_DETAILS = {
   name: "Travels Feeder",
@@ -668,3 +668,29 @@ export const TRUST_POINTS = [
   { title: "Experienced Travel Team", desc: "Decades of combined knowledge in island tourism and world routes." },
   { title: "Worldwide Travel Assistance", desc: "Outbound holiday packages and flight support to 50+ countries." }
 ];
+
+export interface TravelContent {
+  companyDetails: typeof COMPANY_DETAILS;
+  destinations: Destination[];
+  tourPackages: TourPackage[];
+  internationalDestinations: InternationalDestination[];
+  services: ServiceItem[];
+  vehicleOptions: VehicleOption[];
+  accommodationCategories: AccommodationCategory[];
+  galleryItems: GalleryItem[];
+  testimonials: Testimonial[];
+  trustPoints: typeof TRUST_POINTS;
+}
+
+export function hydrateTravelData(content: TravelContent): void {
+  Object.assign(COMPANY_DETAILS, content.companyDetails);
+  DESTINATIONS.splice(0, DESTINATIONS.length, ...content.destinations);
+  TOUR_PACKAGES.splice(0, TOUR_PACKAGES.length, ...content.tourPackages);
+  INTERNATIONAL_DESTINATIONS.splice(0, INTERNATIONAL_DESTINATIONS.length, ...content.internationalDestinations);
+  SERVICES.splice(0, SERVICES.length, ...content.services);
+  VEHICLE_OPTIONS.splice(0, VEHICLE_OPTIONS.length, ...content.vehicleOptions);
+  ACCOMMODATION_CATEGORIES.splice(0, ACCOMMODATION_CATEGORIES.length, ...content.accommodationCategories);
+  GALLERY_ITEMS.splice(0, GALLERY_ITEMS.length, ...content.galleryItems);
+  TESTIMONIALS.splice(0, TESTIMONIALS.length, ...content.testimonials);
+  TRUST_POINTS.splice(0, TRUST_POINTS.length, ...content.trustPoints);
+}

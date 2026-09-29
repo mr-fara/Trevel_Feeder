@@ -18,6 +18,7 @@ import {
   Users
 } from 'lucide-react';
 import { COMPANY_DETAILS } from '../../data/travelData';
+import {apiPost} from '../../lib/api';
 
 export const ContactPreview: React.FC = () => {
   const [fullName, setFullName] = useState('');
@@ -29,10 +30,24 @@ export const ContactPreview: React.FC = () => {
   const [travelers, setTravelers] = useState('2');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError('');
+    try {
+      await apiPost('/api/enquiries', {
+        fullName, email, phone, service: travelType, destination, travelDate,
+        passengers: travelers, message, source: 'home-contact',
+      });
+      setSubmitted(true);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Could not send your enquiry. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const travelTypes = [
@@ -433,16 +448,18 @@ export const ContactPreview: React.FC = () => {
                     </div>
 
                     {/* Submit Button */}
+                    {submitError && <p role="alert" className="text-sm text-red-700">{submitError}</p>}
                     <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                       <p className="text-[12px] text-slate-400 font-normal tracking-[-0.01em]">
                         We respond within 2 business hours.
                       </p>
                       <button
                         type="submit"
+                        disabled={isSubmitting}
                         className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 bg-[#0A0A0A] hover:bg-[#1a1a1a] active:scale-[0.98] text-white rounded-2xl text-[14px] font-medium tracking-[-0.01em] shadow-[0_1px_2px_rgba(0,0,0,0.08),0_8px_20px_-6px_rgba(0,0,0,0.25)] transition-all duration-200 cursor-pointer"
                       >
                         <Send className="w-4 h-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
-                        Submit Enquiry
+                        {isSubmitting ? 'Sending...' : 'Submit Enquiry'}
                       </button>
                     </div>
                   </form>

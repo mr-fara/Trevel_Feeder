@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, MessageCircle, Send, CheckCircle2, Clock, ShieldCheck, Globe } from 'lucide-react';
 import { COMPANY_DETAILS } from '../data/travelData';
+import {apiPost} from '../lib/api';
 
 export const ContactPage: React.FC = () => {
   const [fullName, setFullName] = useState('');
@@ -12,10 +13,24 @@ export const ContactPage: React.FC = () => {
   const [travelers, setTravelers] = useState('2');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError('');
+    try {
+      await apiPost('/api/enquiries', {
+        fullName, email, phone, service: travelType, destination, travelDate,
+        passengers: travelers, message, source: 'contact-page',
+      });
+      setSubmitted(true);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Could not send your enquiry. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const travelTypes = [
@@ -302,12 +317,14 @@ export const ContactPage: React.FC = () => {
                   </div>
 
                   <div className="pt-2">
+                    {submitError && <p role="alert" className="mb-3 text-sm text-red-700">{submitError}</p>}
                     <button
                       type="submit"
+                      disabled={isSubmitting}
                       className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-[#E53935] hover:bg-[#B91C1C] text-white rounded-full text-xs font-bold tracking-wide shadow-sm hover:shadow transition-all cursor-pointer"
                     >
                       <Send className="w-3.5 h-3.5" />
-                      Send Enquiry
+                      {isSubmitting ? 'Sending...' : 'Send Enquiry'}
                     </button>
                   </div>
                 </form>
