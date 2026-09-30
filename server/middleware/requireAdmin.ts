@@ -9,12 +9,13 @@ export const requireAdmin: RequestHandler = (request, response, next) => {
     return;
   }
 
-  void readAdminSession(token).then((email) => {
-    if (!email) {
+  void readAdminSession(token).then((admin) => {
+    if (!admin) {
       response.status(401).json({error: {code: 'ADMIN_SESSION_EXPIRED', message: 'Admin session expired'}});
       return;
     }
-    response.locals.adminEmail = email;
+    response.locals.adminId = admin.id;
+    response.locals.adminEmail = admin.email;
     next();
   }).catch(next);
 };

@@ -3,7 +3,7 @@ import rateLimit from 'express-rate-limit';
 import {requireAdmin} from '../../middleware/requireAdmin.ts';
 import {validateBody} from '../../middleware/validateBody.ts';
 import * as controller from './admin.controller.ts';
-import {enquiryStatusSchema, loginSchema, transferStatusSchema} from './admin.schema.ts';
+import {adminPasswordSchema, adminProfileSchema, enquiryStatusSchema, loginSchema, transferStatusSchema} from './admin.schema.ts';
 
 export const adminRouter = Router();
 
@@ -21,6 +21,8 @@ adminRouter.post('/auth/login', loginLimiter, validateBody(loginSchema), control
 adminRouter.get('/auth/session', requireAdmin, controller.getSession);
 adminRouter.post('/auth/logout', requireAdmin, controller.logout);
 adminRouter.use(requireAdmin);
+adminRouter.put('/account/profile', validateBody(adminProfileSchema), controller.updateProfile);
+adminRouter.patch('/account/password', validateBody(adminPasswordSchema), controller.changePassword);
 adminRouter.get('/dashboard', controller.getDashboard);
 adminRouter.get('/enquiries', controller.getEnquiries);
 adminRouter.patch('/enquiries/:id/status', validateBody(enquiryStatusSchema), controller.patchEnquiryStatus);

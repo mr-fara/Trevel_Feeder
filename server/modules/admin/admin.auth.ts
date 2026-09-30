@@ -1,4 +1,4 @@
-import {compare} from 'bcryptjs';
+import {compare, hash} from 'bcryptjs';
 import {SignJWT, jwtVerify} from 'jose';
 import {env} from '../../config/env.ts';
 import * as adminRepository from './admin.repository.ts';
@@ -36,15 +36,29 @@ export async function createAdminSession(id: string, email: string): Promise<str
     .sign(signingKey());
 }
 
-export async function readAdminSession(token: string): Promise<string | null> {
+export async function readAdminSession(token: string): Promise<{id: string; email: string} | null> {
   if (!isAdminSessionConfigured()) return null;
   try {
     const {payload} = await jwtVerify(token, signingKey());
-    return typeof payload.email === 'string' ? payload.email : null;
+    return typeof payload.sub === 'string' && typeof payload.email === 'string'
+      ? {id: payload.sub, email: payload.email}
+      : null;
   } catch {
     return null;
   }
 }
+
+export async function verifyAdminPassword(id: string, password: string): Promise<boolean> {
+  const admin = await adminRepository.findAdminById(id);
+  if (!admin?.is_active) return false;
+  try {
+    return await compare(password, admin.password_hash);
+  } catch {
+    return false;
+  }
+}
+
+export const hashAdminPassword = (password: string) => hash(password, 12);
 
 export const adminSessionCookie = {
   name: sessionCookieName,

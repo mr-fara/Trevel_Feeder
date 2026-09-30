@@ -10,3 +10,6 @@ export const listTransfers = (query: RequestListQuery) => adminRepository.listTr
 export const updateEnquiryStatus = (id: string, status: EnquiryStatus) => adminRepository.updateEnquiryStatus(id, status);
 export const updateTransferStatus = (id: string, status: TransferStatus) => adminRepository.updateTransferStatus(id, status);
 export const saveContent = (collection: ManagedContentCollection, payload: unknown) => saveContentDocument(collection, payload);
+export const getAdminProfile = (id: string) => adminRepository.getAdminProfile(id);
+export const updateAdminProfile = (id: string, displayName: string, email: string) => adminRepository.updateAdminProfile(id, displayName, email);
+export const updateAdminPassword = (id: string, passwordHash: string) => adminRepository.updateAdminPassword(id, passwordHash);

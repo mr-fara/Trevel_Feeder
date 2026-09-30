@@ -12,6 +12,41 @@ export interface AdminAccount {
   is_active: boolean;
 }
 
+export interface AdminProfile {
+  id: string;
+  display_name: string;
+  email: string;
+}
+
+export async function findAdminById(id: string): Promise<AdminAccount | null> {
+  const result = await pool.query<AdminAccount>(
+    'SELECT id, email, password_hash, is_active FROM admin_users WHERE id = $1 LIMIT 1',
+    [id],
+  );
+  return result.rows[0] ?? null;
+}
+
+export async function getAdminProfile(id: string): Promise<AdminProfile | null> {
+  const result = await pool.query<AdminProfile>(
+    'SELECT id, display_name, email FROM admin_users WHERE id = $1 AND is_active = TRUE LIMIT 1',
+    [id],
+  );
+  return result.rows[0] ?? null;
+}
+
+export async function updateAdminProfile(id: string, displayName: string, email: string): Promise<AdminProfile | null> {
+  const result = await pool.query<AdminProfile>(
+    `UPDATE admin_users SET display_name = $2, email = LOWER($3), updated_at = NOW()
+     WHERE id = $1 AND is_active = TRUE RETURNING id, display_name, email`,
+    [id, displayName.trim(), email.trim()],
+  );
+  return result.rows[0] ?? null;
+}
+
+export async function updateAdminPassword(id: string, passwordHash: string): Promise<void> {
+  await pool.query('UPDATE admin_users SET password_hash = $2, updated_at = NOW() WHERE id = $1', [id, passwordHash]);
+}
+
 export async function findAdminByEmail(email: string): Promise<AdminAccount | null> {
   const result = await pool.query<AdminAccount>(
     'SELECT id, email, password_hash, is_active FROM admin_users WHERE LOWER(email) = LOWER($1) LIMIT 1',

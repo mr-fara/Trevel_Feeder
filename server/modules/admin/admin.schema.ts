@@ -5,6 +5,17 @@ export const loginSchema = z.object({
   password: z.string().min(1).max(200),
 }).strict();
 
+export const adminProfileSchema = z.object({
+  displayName: z.string().trim().min(2).max(80),
+  email: z.email().max(254),
+  currentPassword: z.string().min(1).max(200),
+}).strict();
+
+export const adminPasswordSchema = z.object({
+  currentPassword: z.string().min(1).max(200),
+  newPassword: z.string().min(12).max(200),
+}).strict();
+
 export const listQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(20),

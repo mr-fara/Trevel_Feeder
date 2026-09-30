@@ -21,6 +21,7 @@ import {
   Plane,
   RefreshCw,
   Search,
+  Settings,
   ShieldCheck,
   Users,
   X,
@@ -28,8 +29,9 @@ import {
 import {ApiError, apiGet, apiPatch, apiPost} from '../../lib/api';
 import {AdminLoginPage} from './AdminLoginPage';
 import {AdminContent} from './AdminContent';
+import {AdminSettings} from './AdminSettings';
 
-interface AdminSession {email: string}
+interface AdminSession {displayName: string; email: string}
 interface Paginated<T> {items: T[]; page: number; pageSize: number; total: number}
 interface RequestRecord {
   id: string;
@@ -89,6 +91,7 @@ function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const [checking, setChecking] = useState(true);
   const [authError, setAuthError] = useState('');
   const [signingOut, setSigningOut] = useState(false);
@@ -99,6 +102,7 @@ function AdminLayout() {
     try {
       const session = await apiGet<AdminSession>('/api/admin/auth/session');
       setEmail(session.email);
+      setDisplayName(session.displayName);
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) {
         navigate('/admin/login', {replace: true, state: {from: location.pathname}});
@@ -152,11 +156,13 @@ function AdminLayout() {
           <SidebarLink to="/admin/content/services" icon={<BriefcaseBusiness size={17} />} label="Services" />
           <SidebarLink to="/admin/content/safari" icon={<Binoculars size={17} />} label="Safari" />
           <SidebarLink to="/admin/content/gallery" icon={<Images size={17} />} label="Gallery" />
+          <p className="hidden px-3 pb-2 pt-5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/35 lg:block">Account</p>
+          <SidebarLink to="/admin/settings" icon={<Settings size={17} />} label="Settings" />
         </nav>
         <div className="hidden border-t border-white/10 p-4 lg:block">
           <div className="mb-3 flex min-w-0 items-center gap-2.5 px-2">
             <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#E7AD76] text-xs font-bold text-[#163A35]">{email.slice(0, 1).toUpperCase()}</span>
-            <span className="min-w-0"><span className="block truncate text-xs font-semibold">{email}</span><span className="block text-[10px] text-white/45">Administrator</span></span>
+            <span className="min-w-0"><span className="block truncate text-xs font-semibold">{displayName || email}</span><span className="block truncate text-[10px] text-white/45">{email}</span></span>
           </div>
           <button onClick={() => void signOut()} disabled={signingOut} className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-xs font-semibold text-white/65 transition hover:bg-white/10 hover:text-white"><LogOut size={15} />{signingOut ? 'Signing out...' : 'Sign out'}</button>
         </div>
@@ -166,7 +172,7 @@ function AdminLayout() {
           <div className="flex items-center gap-2 text-xs text-slate-400"><span>Workspace</span><ChevronRight size={14} /><span className="font-semibold text-[#273A34]">{location.pathname.split('/').at(-1) === 'admin' ? 'Overview' : statusLabel(location.pathname.split('/').at(-1) ?? '')}</span></div>
           <div className="flex items-center gap-2 text-xs font-medium text-[#55716A]"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Database connected</div>
         </header>
-        <main className="mx-auto w-full max-w-375 p-5 sm:p-8 xl:p-10"><Outlet context={{email}} /></main>
+        <main className="mx-auto w-full max-w-375 p-5 sm:p-8 xl:p-10"><Outlet context={{email, displayName, updateProfile: (profile: AdminSession) => {setEmail(profile.email); setDisplayName(profile.displayName);}}} /></main>
       </div>
     </div>
   );
@@ -363,6 +369,7 @@ function AdminRoutes() {
       <Route path="content/services" element={<AdminContent collection="services" />} />
       <Route path="content/safari" element={<AdminContent collection="safariContent" />} />
       <Route path="content/gallery" element={<AdminContent collection="galleryItems" />} />
+      <Route path="settings" element={<AdminSettings />} />
     </Route>
     <Route path="*" element={<Navigate to="/admin" replace />} />
   </Routes>;

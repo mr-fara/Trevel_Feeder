@@ -19,14 +19,14 @@ View your app in AI Studio: https://ai.studio/apps/04641220-032d-48a1-bab3-8667f
 4. Create the schema and seed the current travel catalog with `npm run db:migrate`.
 5. Start the frontend and API together with `npm run dev` and open `http://localhost:3000`.
 
-To enable `/admin`, generate a bcrypt password hash in the terminal with
-`npm run admin:hash-password` and put it in `ADMIN_PASSWORD_HASH` in your
-local `.env`. Set `ADMIN_EMAIL` and generate a session signing key with
+To enable `/admin`, set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in your local
+`.env`; use a password with at least 12 characters. Generate a session signing key with
 `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"`,
 then save that value as `ADMIN_SESSION_SECRET` in `.env`. Run
 `npm run db:migrate` followed by `npm run admin:seed` to store the admin email
-and bcrypt hash in PostgreSQL. Login verifies the submitted password against
-that database hash; plaintext passwords are never stored. Keep `.env` private.
+and a bcrypt hash in PostgreSQL. The seed script hashes `ADMIN_PASSWORD` before
+storage; login verifies the submitted password against that database hash.
+Keep `.env` private.
 
 In PowerShell, if port 3000 is already occupied, run `$env:PORT=3001; npm run dev`.
 

@@ -3,9 +3,9 @@ import type {RequestHandler} from 'express';
 import {env} from '../../config/env.ts';
 import {asyncHandler} from '../../shared/asyncHandler.ts';
 import {HttpError} from '../../shared/httpError.ts';
-import {adminSessionCookie, createAdminSession, isAdminSessionConfigured, verifyAdminCredentials} from './admin.auth.ts';
+import {adminSessionCookie, createAdminSession, hashAdminPassword, isAdminSessionConfigured, verifyAdminCredentials, verifyAdminPassword} from './admin.auth.ts';
 import * as adminService from './admin.service.ts';
-import {enquiryStatusSchema, listQuerySchema, loginSchema, transferStatusSchema} from './admin.schema.ts';
+import {adminPasswordSchema, adminProfileSchema, enquiryStatusSchema, listQuerySchema, loginSchema, transferStatusSchema} from './admin.schema.ts';
 import type {EnquiryStatus, TransferStatus} from './admin.repository.ts';
 import {managedContentSchemas, type ManagedContentCollection} from './admin.content.schema.ts';
 
@@ -35,9 +35,48 @@ export const login: RequestHandler = asyncHandler(async (request, response) => {
   response.json({data: {email: admin.email}});
 });
 
-export const getSession: RequestHandler = (_request, response) => {
-  response.json({data: {email: response.locals.adminEmail}});
-};
+export const getSession: RequestHandler = asyncHandler(async (_request, response) => {
+  const profile = await adminService.getAdminProfile(response.locals.adminId);
+  if (!profile) throw new HttpError(401, 'Admin account is unavailable', 'ADMIN_ACCOUNT_UNAVAILABLE');
+  response.json({data: {displayName: profile.display_name, email: profile.email}});
+});
+
+export const updateProfile: RequestHandler = asyncHandler(async (request, response) => {
+  const profile = adminProfileSchema.parse(request.body);
+  const adminId = response.locals.adminId as string;
+  if (!await verifyAdminPassword(adminId, profile.currentPassword)) {
+    throw new HttpError(401, 'Current password is incorrect', 'INVALID_CURRENT_PASSWORD');
+  }
+
+  try {
+    const updated = await adminService.updateAdminProfile(adminId, profile.displayName, profile.email);
+    if (!updated) throw new HttpError(401, 'Admin account is unavailable', 'ADMIN_ACCOUNT_UNAVAILABLE');
+    response.json({data: {displayName: updated.display_name, email: updated.email}});
+  } catch (error) {
+    if ((error as {code?: string}).code === '23505') {
+      throw new HttpError(409, 'That email address is already in use', 'ADMIN_EMAIL_IN_USE');
+    }
+    throw error;
+  }
+});
+
+export const changePassword: RequestHandler = asyncHandler(async (request, response) => {
+  const passwords = adminPasswordSchema.parse(request.body);
+  const adminId = response.locals.adminId as string;
+  if (!await verifyAdminPassword(adminId, passwords.currentPassword)) {
+    throw new HttpError(401, 'Current password is incorrect', 'INVALID_CURRENT_PASSWORD');
+  }
+  if (passwords.currentPassword === passwords.newPassword) {
+    throw new HttpError(400, 'Choose a different password', 'PASSWORD_UNCHANGED');
+  }
+
+  await adminService.updateAdminPassword(adminId, await hashAdminPassword(passwords.newPassword));
+  response.setHeader('Set-Cookie', stringifySetCookie({name: adminSessionCookie.name, value: '',
+    ...sessionCookieOptions,
+    maxAge: 0,
+  }));
+  response.json({data: {updated: true}});
+});
 
 export const logout: RequestHandler = (_request, response) => {
   response.setHeader('Set-Cookie', stringifySetCookie({name: adminSessionCookie.name, value: '',
