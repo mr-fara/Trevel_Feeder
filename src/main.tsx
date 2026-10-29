@@ -15,17 +15,17 @@ async function startApp() {
         <App />
       </StrictMode>,
     );
-  } catch {
+  } catch (error) {
+    console.error('Could not load travel content from the API; using bundled content instead.', error);
     root.render(
-      <main className="grid min-h-screen place-items-center p-6 text-center">
+      <StrictMode>
         <div>
-          <h1 className="text-2xl font-semibold">Travel data is unavailable</h1>
-          <p className="mt-2">The server could not load the site content. Please try again.</p>
-          <button className="mt-5 underline" onClick={() => window.location.reload()}>
-            Try again
-          </button>
+          <div className="bg-amber-50 px-4 py-2 text-center text-sm text-amber-900" role="alert">
+            Live content is unavailable. Showing the bundled travel catalog; database-powered features may not work.
+          </div>
+          <App />
         </div>
-      </main>,
+      </StrictMode>,
     );
   }
 }

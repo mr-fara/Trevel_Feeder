@@ -17,7 +17,7 @@ export const errorHandler: ErrorRequestHandler = (error: unknown, _request, resp
   const databaseCode = typeof error === 'object' && error !== null && 'code' in error
     ? String(error.code)
     : '';
-  const databaseUnavailable = ['ECONNREFUSED', 'ETIMEDOUT', '08001', '08006', '28P01', '3D000', '57P03'].includes(databaseCode);
+  const databaseUnavailable = ['ECONNREFUSED', 'ETIMEDOUT', 'ENOTFOUND', 'EAI_AGAIN', '08001', '08006', '28P01', '3D000', '57P03'].includes(databaseCode);
 
   if (error instanceof HttpError) {
     response.status(error.statusCode).json({

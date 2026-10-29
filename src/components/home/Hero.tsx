@@ -1,4 +1,4 @@
-import React, { useRef, memo } from 'react';
+import React, { useRef, memo, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   motion,
@@ -17,7 +17,8 @@ import {
   MapPin,
   Clock,
 } from 'lucide-react';
-import heroFlightImg from '../../assets/images/hero_flight_travel_1790443248215.jpg';
+import largeDeviceVideo from '../../assets/videos/large_device.mp4';
+import smallDeviceVideo from '../../assets/videos/small_device.mp4';
 import sigiriyaImg from '../../assets/images/sigiriya_rock_sunrise_1790443260997.jpg';
 import { useEnquiry } from '../../context/EnquiryContext';
 
@@ -88,6 +89,62 @@ const AnimatedStat = memo(({ value, label }: { value: string; label: string }) =
 ));
 AnimatedStat.displayName = 'AnimatedStat';
 
+/* ─── Responsive Video Background ── */
+
+const ResponsiveVideo = memo(() => {
+  const [isMobile, setIsMobile] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const checkDevice = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
+
+  // Reload video source when device changes
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.load();
+      videoRef.current.play().catch(() => {
+        // Autoplay blocked — silently fail
+      });
+    }
+  }, [isMobile]);
+
+  return (
+    <>
+      {/* Fallback poster/gradient while video loads */}
+      {!videoLoaded && (
+        <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-[#0a0a0f] via-[#12121a] to-[#060608] animate-pulse" />
+      )}
+
+      <video
+        ref={videoRef}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        onLoadedData={() => setVideoLoaded(true)}
+        className={`w-full h-full object-cover object-center transition-opacity duration-1000 ${
+          videoLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
+        key={isMobile ? 'mobile' : 'desktop'}
+      >
+        <source
+          src={isMobile ? smallDeviceVideo : largeDeviceVideo}
+          type="video/mp4"
+        />
+      </video>
+    </>
+  );
+});
+ResponsiveVideo.displayName = 'ResponsiveVideo';
+
 /* ─── Floating Cards (Perfectly Aligned) ── */
 
 const DestinationCard = memo(() => (
@@ -96,7 +153,6 @@ const DestinationCard = memo(() => (
     animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
     transition={{ delay: 0.55, duration: 1, ease: [0.22, 1, 0.36, 1] }}
     whileHover={{ y: -6, transition: { duration: 0.4, ease: 'easeOut' } }}
-    // Anchored center-right
     className="absolute top-1/2 -translate-y-1/2 right-0 xl:right-4 w-[290px] z-20 will-change-transform"
   >
     <div className="relative rounded-[28px] overflow-hidden border border-white/10 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.12)] bg-black/40 backdrop-blur-3xl">
@@ -173,7 +229,6 @@ const ConciergeCard = memo(() => (
     animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
     transition={{ delay: 0.75, duration: 1, ease: [0.22, 1, 0.36, 1] }}
     whileHover={{ y: -4, transition: { duration: 0.3 } }}
-    // Floating top right
     className="absolute top-4 right-[15%] xl:right-[20%] z-10 will-change-transform bg-black/45 backdrop-blur-3xl px-4 py-3.5 rounded-2xl border border-white/10 shadow-[0_20px_48px_-8px_rgba(0,0,0,0.5)] flex items-center gap-3.5"
   >
     <div className="w-10 h-10 rounded-[12px] bg-sky-500/15 border border-sky-400/20 flex items-center justify-center shrink-0">
@@ -194,7 +249,6 @@ const FlightTickerCard = memo(() => (
     initial={{ opacity: 0, x: -20, filter: 'blur(8px)' }}
     animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
     transition={{ delay: 0.9, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-    // Floating top left (cascades over the top left of destination card)
     className="absolute top-[18%] left-[-2%] xl:left-[-6%] z-30 will-change-transform bg-black/45 backdrop-blur-3xl px-4 py-3.5 rounded-2xl border border-white/10 shadow-[0_20px_48px_-8px_rgba(0,0,0,0.5)]"
   >
     <p className="text-[9px] font-bold tracking-widest uppercase text-white/40 mb-2">
@@ -227,7 +281,6 @@ const StatsRow = memo(() => (
     initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
     animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
     transition={{ delay: 1.05, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-    // Floating bottom left (sits neatly below everything else)
     className="absolute bottom-6 left-[-2%] xl:left-[-6%] z-30 flex items-center gap-5 bg-black/45 backdrop-blur-3xl px-5 py-3.5 rounded-2xl border border-white/10 shadow-[0_20px_48px_-8px_rgba(0,0,0,0.5)]"
   >
     {STATS.map((stat, i) => (
@@ -262,21 +315,19 @@ export const Hero: React.FC = () => {
       ref={sectionRef}
       className="relative w-full h-[100svh] min-h-[700px] max-h-[1100px] flex items-center overflow-hidden bg-[#060608]"
     >
-      {/* ── Parallax Background ── */}
+      {/* ── Parallax Video Background ── */}
       <motion.div
         style={{ y: springImgY }}
         className="absolute inset-0 w-full h-[115%] -top-[7.5%] will-change-transform"
       >
-        <motion.img
+        <motion.div
           initial={{ scale: 1.1 }}
           animate={{ scale: 1 }}
           transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
-          src={heroFlightImg}
-          alt="Travels Feeder — luxury flight above clouds"
-          className="w-full h-full object-cover object-center"
-          draggable={false}
-          loading="eager"
-        />
+          className="w-full h-full"
+        >
+          <ResponsiveVideo />
+        </motion.div>
       </motion.div>
 
       {/* ── Overlays ── */}
