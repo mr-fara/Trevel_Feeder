@@ -101,7 +101,7 @@ export const Navbar: React.FC = () => {
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           className={`border-b transition-colors duration-500 ${
             isTransparentTheme 
-              ? 'bg-black/30 backdrop-blur-md border-white/10' 
+              ? 'bg-black backdrop-blur-md border-white/10' 
               : 'bg-[#060608] border-[#060608]' // Solid dark bg on inner pages so white text is readable
           }`}
         >

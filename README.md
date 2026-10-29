@@ -19,6 +19,11 @@ View your app in AI Studio: https://ai.studio/apps/04641220-032d-48a1-bab3-8667f
 4. Create the schema and seed the current travel catalog with `npm run db:migrate`.
 5. Start the frontend and API together with `npm run dev` and open `http://localhost:3000`.
 
+If the database is temporarily unavailable, the public site uses its bundled
+travel catalog and displays a warning. Database-backed features, including
+content updates and enquiry submissions, still require a working database
+connection.
+
 To enable `/admin`, set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in your local
 `.env`; use a password with at least 12 characters. Generate a session signing key with
 `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"`,
